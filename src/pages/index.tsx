@@ -42,7 +42,10 @@ export default function Home() {
                                 if (value === 2) color = "red.500"
                                 if (value === 3) color = "purple.500"
                                 return (
-                                    <GridItem bg={color} key={id}>{id}&nbsp;{value}</GridItem>
+                                    <GridItem bg={color}
+                                              h={10} w={10} p={1}
+                                              borderRadius="md"
+                                              key={id}>{id}&nbsp;{value}</GridItem>
                                 )
                             })
                         }
