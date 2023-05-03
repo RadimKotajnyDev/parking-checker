@@ -28,7 +28,7 @@ export default function Home() {
             setSpot([...Spots])
         }
     }, [data, error])
-
+    let color: string
     return (
         <>
             <Center>
@@ -38,8 +38,11 @@ export default function Home() {
                         {
                             Spots.map((spot): any => {
                                 const {id, value} = spot
+                                if (value === 1) color = "teal.500"
+                                if (value === 2) color = "red.500"
+                                if (value === 3) color = "purple.500"
                                 return (
-                                    <GridItem key={id}>{value}</GridItem>
+                                    <GridItem bg={color} key={id}>{id}&nbsp;{value}</GridItem>
                                 )
                             })
                         }
