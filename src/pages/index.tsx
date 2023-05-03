@@ -10,15 +10,23 @@ export default function Home() {
         id: "",
         value: 0
     }
-    const url = "./test.json"
+    const url = "/test.json"
 
     const [Spots, setSpot] = useState([initialSpot]);
 
     const { data, error } = useSWR(url, fetcher)
 
     useEffect(() => {
-        console.log(error)
-        setSpot(Convert.toSpot(data))
+        //console.log(error)
+        if (data) {
+            data.map((item: Spot) => {
+                if(item) {
+                    console.log(item)
+                    Spots.push(item)
+                }
+            })
+            setSpot([...Spots])
+        }
     }, [data, error])
 
     return (
