@@ -8,7 +8,7 @@
 // match the expected interface, even if the JSON is valid.
 
 export interface Spot {
-    id:    string;
+    id: string;
     value: number;
 }
 
