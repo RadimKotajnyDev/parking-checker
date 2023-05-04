@@ -1,4 +1,4 @@
-import {Center, Flex, Heading} from "@chakra-ui/react";
+import {Center, Flex, Grid, GridItem, Heading, Spinner} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import useSWR from "swr";
 
@@ -31,6 +31,9 @@ function maxLetterCount(Spots: Spot[], letter: string): number {
 }
 
 export default function Home() {
+
+    const [spinner, setSpinner] = useState(false);
+
     const initialSpot: Spot = {
         id: "",
         value: 0
@@ -46,6 +49,7 @@ export default function Home() {
     }, [])
     useEffect(() => {
         //console.log(error)
+        setSpinner(true)
         if (data) {
             data.map((item: Spot) => {
                 if(item) {
@@ -54,7 +58,7 @@ export default function Home() {
                 }
             })
             setSpots([...Spots])
-
+            setSpinner(false)
         }
     }, [data, error])
 
@@ -72,7 +76,8 @@ export default function Home() {
 
                         }
                     </Flex>
-                    {/*<Grid templateColumns={`repeat(${maxLetterCount(Spots, "b")}, 1fr)`} gap={1}
+                    { spinner ? (<Spinner size="xl" color="teal.500" />) : (
+                        <Grid templateColumns={`repeat(${maxLetterCount(Spots, "b")}, 1fr)`} gap={1}
                           bg="blackAlpha.300"
                           p={10} borderRadius="xl">
                         {
@@ -89,7 +94,7 @@ export default function Home() {
                                 )
                             })
                         }
-                    </Grid>*/}
+                    </Grid>)}
                 </Flex>
             </Center>
         </>
