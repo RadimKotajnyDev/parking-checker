@@ -12,10 +12,13 @@ export default function Home() {
     }
     const url = "/test.json"
 
-    const [Spots, setSpot] = useState([initialSpot]);
-
+    const [Spots, setSpots] = useState([initialSpot]);
     const { data, error } = useSWR(url, fetcher)
 
+    // remove initial state collision
+    useEffect(() => {
+        setSpots([])
+    }, [])
     useEffect(() => {
         //console.log(error)
         if (data) {
@@ -25,7 +28,7 @@ export default function Home() {
                     Spots.push(item)
                 }
             })
-            setSpot([...Spots])
+            setSpots([...Spots])
         }
     }, [data, error])
     let color: string
@@ -34,7 +37,9 @@ export default function Home() {
             <Center>
                 <Flex flexDirection="column" align="center" justify="center">
                     <Heading>Parking checker system</Heading>
-                    <Grid>
+                    <Grid templateColumns='repeat(5, 1fr)' gap={1}
+                          bg="blackAlpha.300"
+                          p={10} borderRadius="xl">
                         {
                             Spots.map((spot): any => {
                                 const {id, value} = spot
@@ -45,11 +50,10 @@ export default function Home() {
                                     <GridItem bg={color}
                                               h={10} w={10} p={1}
                                               borderRadius="md"
-                                              key={id}>{id}&nbsp;{value}</GridItem>
+                                              key={id}>{id}</GridItem>
                                 )
                             })
                         }
-                        <GridItem h={10} w={10} bg="teal.700" borderRadius="md"/>
                     </Grid>
                 </Flex>
             </Center>
