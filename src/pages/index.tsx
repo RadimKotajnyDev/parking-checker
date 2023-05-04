@@ -74,7 +74,7 @@ export default function Home() {
     }, [data, error])
 
     let color: string
-    //let sactors = [...Array(uniqueLetterCount(Spots)).keys()]
+    let sectors = [...Array(Math.round(uniqueLetterCount(Spots)/2)).keys()]
     return (
         <>
             <Center>
@@ -106,30 +106,14 @@ export default function Home() {
 
                     <p>{maxLetterCount(Spots, "b")}</p>
                     <p>{uniqueLetterCount(Spots)}</p>
-                    <Flex>
-                        {
-
-                        }
+                    <Flex>{ spinner ? (<Spinner size="xl" color="teal.500" />) : (
+                        <Flex>
+                            {
+                                sectors.map((sector))
+                            }
+                        </Flex>
+                        )}
                     </Flex>
-                    { spinner ? (<Spinner size="xl" color="teal.500" />) : (
-                        <Grid templateColumns={`repeat(${maxLetterCount(Spots, "b")}, 1fr)`} gap={1}
-                          bg="blackAlpha.300"
-                          p={10} borderRadius="xl">
-                        {
-                            Spots.map((spot): any => {
-                                const {id, value} = spot
-                                if (value === 1) color = "teal.500"
-                                if (value === 2) color = "red.500"
-                                if (value === 3) color = "purple.500"
-                                return (
-                                    <GridItem bg={color}
-                                              h={10} w={10} p={1}
-                                              borderRadius="md"
-                                              key={id}>{id}</GridItem>
-                                )
-                            })
-                        }
-                    </Grid>)}
                 </Flex>
             </Center>
         </>
