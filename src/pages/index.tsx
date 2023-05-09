@@ -75,8 +75,7 @@ export default function Home() {
     }
   }, [data, error])
   console.log(Spots)
-  let OnZeroIncrementer: number = 0
-  let OnMinusOneIncrementer: number = -1
+  let Incrementer: number = 0
   let color: string
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
   return (
@@ -114,8 +113,7 @@ export default function Home() {
             <Flex>
               {
                 sectors.map((sector: number) => {
-                  OnMinusOneIncrementer += 1
-                  OnZeroIncrementer += 1
+                  Incrementer += 1
                   return <Flex bg="blackAlpha.500"
                                direction="row"
                                key={sector}
@@ -124,8 +122,9 @@ export default function Home() {
                   >
                     <Flex direction="column">
                       {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + OnMinusOneIncrementer].toLowerCase()) {
-                          return <Box key={current.id}>{current.id}</Box>
+                        if(current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
+                          return <Box p={2} bg="teal.500" borderRadius="md" m={1}
+                                      key={current.id}>{current.id}</Box>
                         }
                       })}
                       {/*
@@ -134,8 +133,9 @@ export default function Home() {
                     </Flex>
                     <Flex direction="column">
                       {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + OnZeroIncrementer].toLowerCase()) {
-                          return <Box key={current.id}>{current.id}</Box>
+                        if(current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
+                          return <Box p={2} bg="red.500" borderRadius="md" m={1}
+                                      key={current.id}>{current.id}</Box>
                         }
                       })}
                       {/*
