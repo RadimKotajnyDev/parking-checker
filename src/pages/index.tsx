@@ -74,7 +74,6 @@ export default function Home() {
       setSpinner(false)
     }
   }, [data, error])
-  console.log(Spots)
   let Incrementer: number = 0
   let color: string
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
@@ -82,8 +81,7 @@ export default function Home() {
     <>
       <Center>
         <Flex flexDirection="column" align="center" justify="center">
-          <Heading>Parking checker system</Heading>
-
+          <Heading mb={2}>Parking checker system</Heading>
           <Popover>
             <PopoverTrigger>
               <Button>Legend</Button>
@@ -105,10 +103,6 @@ export default function Home() {
               </PopoverBody>
             </PopoverContent>
           </Popover>
-
-
-          <p>maxLetterCount = {maxLetterCount(Spots, "b")}</p>
-          <p>uniqueLetterCount = {uniqueLetterCount(Spots)}</p>
           <Flex>{spinner ? (<Spinner size="xl" color="teal.500"/>) : (
             <Flex>
               {
@@ -117,30 +111,29 @@ export default function Home() {
                   return <Flex bg="blackAlpha.500"
                                direction="row"
                                key={sector}
-                    //templateColumns='repeat(2, 1fr)'
-                               gap={6} w="fit" m={5} p={2} borderRadius="md"
+                               w="fit" m={5} p={5} borderRadius="md"
                   >
                     <Flex direction="column">
                       {Spots.map(current => {
                         if(current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
-                          return <Box p={2} bg="teal.500" borderRadius="md" m={1}
-                                      key={current.id}>{current.id}</Box>
+                          if (current.status === 1) color = "teal.500"
+                          else if (current.status === 2) color = "red.500"
+                          else color = "purple.500"
+                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
+                                      key={current.id} className="uppercase">{current.id}</Box>
                         }
                       })}
-                      {/*
-                      <Box>A1</Box>
-                      <Box>A2</Box> */}
                     </Flex>
                     <Flex direction="column">
                       {Spots.map(current => {
                         if(current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
-                          return <Box p={2} bg="red.500" borderRadius="md" m={1}
-                                      key={current.id}>{current.id}</Box>
+                          if (current.status === 1) color = "teal.500"
+                          else if (current.status === 2) color = "red.500"
+                          else color = "purple.500"
+                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
+                                      key={current.id} className="uppercase">{current.id}</Box>
                         }
                       })}
-                      {/*
-                      <Box>B1</Box>
-                      <Box>B2</Box> */}
                     </Flex>
                   </Flex>
                 })
