@@ -8,7 +8,7 @@ import {
   PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer
+  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer, Divider
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import useSWR from "swr";
@@ -18,8 +18,8 @@ interface Spot {
   status: number;
 }
 
-const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L",
-  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+  "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -75,14 +75,14 @@ export default function Home() {
     }
   }, [data, error])
   let Incrementer: number = 0
-  let color: string
+  let statusColor: string
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
   return (
     <>
       <Center>
         <Flex flexDirection="column" align="center" justify="center">
-          <Heading mb={2}>Parking checker system</Heading>
-          <Popover>
+          <Text as="h1" fontWeight='semibold' fontSize='4xl' mb={2}>Parking checker system</Text>
+          <Popover trigger="hover">
             <PopoverTrigger>
               <Button>Legend</Button>
             </PopoverTrigger>
@@ -108,30 +108,42 @@ export default function Home() {
               {
                 sectors.map((sector: number) => {
                   Incrementer += 1
-                  return <Flex bg="blackAlpha.500"
+                  return <Flex bg="blackAlpha.400"
                                direction="row"
                                key={sector}
                                w="fit" m={5} p={5} borderRadius="md"
                   >
                     <Flex direction="column">
                       {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
-                          if (current.status === 1) color = "teal.500"
-                          else if (current.status === 2) color = "red.500"
-                          else color = "purple.500"
-                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
-                                      key={current.id} className="uppercase">{current.id}</Box>
+                        if (current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
+                          if (current.status === 1) statusColor = "teal.500"
+                          else if (current.status === 2) statusColor = "red.500"
+                          else statusColor = "purple.500"
+                          return (
+                            <>
+                              <Box color="white"
+                                   p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                   key={current.id} className="tw-uppercase">{current.id}</Box>
+                              <Divider orientation='horizontal' w='100%' h='2px' />
+                            </>)
                         }
                       })}
                     </Flex>
+                    <Divider orientation='vertical'/>
                     <Flex direction="column">
                       {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
-                          if (current.status === 1) color = "teal.500"
-                          else if (current.status === 2) color = "red.500"
-                          else color = "purple.500"
-                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
-                                      key={current.id} className="uppercase">{current.id}</Box>
+                        if (current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
+                          if (current.status === 1) statusColor = "teal.500"
+                          else if (current.status === 2) statusColor = "red.500"
+                          else statusColor = "purple.500"
+                          return (
+                            <>
+                              <Box color="white"
+                                   p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                   key={current.id} className="tw-uppercase">{current.id}</Box>
+                              <Divider orientation='horizontal' w='100%' h='2px'/>
+
+                            </>)
                         }
                       })}
                     </Flex>
