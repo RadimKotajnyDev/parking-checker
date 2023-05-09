@@ -15,8 +15,11 @@ import useSWR from "swr";
 
 interface Spot {
   id: string;
-  value: number;
+  status: number;
 }
+
+const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L",
+  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -47,12 +50,12 @@ export default function Home() {
 
   const initialSpot: Spot = {
     id: "",
-    value: 0
+    status: 0
   }
   const url = "/test.json"
 
   const [Spots, setSpots] = useState([initialSpot]);
-  const { data, error } = useSWR(url, fetcher, { refreshInterval: 5000})
+  const {data, error} = useSWR(url, fetcher, {refreshInterval: 5000})
   // remove initial state collision
   useEffect(() => {
     setSpots([])
@@ -62,7 +65,7 @@ export default function Home() {
     setSpinner(true)
     if (data) {
       data.map((item: Spot) => {
-        if(item) {
+        if (item) {
           //console.log(item)
           Spots.push(item)
         }
@@ -72,8 +75,10 @@ export default function Home() {
     }
   }, [data, error])
   console.log(Spots)
+  let OnZeroIncrementer: number = 0
+  let OnMinusOneIncrementer: number = -1
   let color: string
-  let sectors = [...Array(Math.round(uniqueLetterCount(Spots)/2)).keys()]
+  let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
   return (
     <>
       <Center>
@@ -85,8 +90,8 @@ export default function Home() {
               <Button>Legend</Button>
             </PopoverTrigger>
             <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
+              <PopoverArrow/>
+              <PopoverCloseButton/>
               <PopoverHeader>Legend</PopoverHeader>
               <PopoverBody>
                 <Flex flexDirection="row" my={2}>
@@ -105,16 +110,38 @@ export default function Home() {
 
           <p>maxLetterCount = {maxLetterCount(Spots, "b")}</p>
           <p>uniqueLetterCount = {uniqueLetterCount(Spots)}</p>
-          <Flex>{ spinner ? (<Spinner size="xl" color="teal.500" />) : (
+          <Flex>{spinner ? (<Spinner size="xl" color="teal.500"/>) : (
             <Flex>
               {
                 sectors.map((sector: number) => {
+                  OnMinusOneIncrementer += 1
+                  OnZeroIncrementer += 1
                   return <Flex bg="blackAlpha.500"
+                               direction="row"
                                key={sector}
-                               //templateColumns='repeat(2, 1fr)'
+                    //templateColumns='repeat(2, 1fr)'
                                gap={6} w="fit" m={5} p={2} borderRadius="md"
                   >
-
+                    <Flex direction="column">
+                      {Spots.map(current => {
+                        if(current.id[0] == alphabet[sector + OnMinusOneIncrementer].toLowerCase()) {
+                          return <Box key={current.id}>{current.id}</Box>
+                        }
+                      })}
+                      {/*
+                      <Box>A1</Box>
+                      <Box>A2</Box> */}
+                    </Flex>
+                    <Flex direction="column">
+                      {Spots.map(current => {
+                        if(current.id[0] == alphabet[sector + OnZeroIncrementer].toLowerCase()) {
+                          return <Box key={current.id}>{current.id}</Box>
+                        }
+                      })}
+                      {/*
+                      <Box>B1</Box>
+                      <Box>B2</Box> */}
+                    </Flex>
                   </Flex>
                 })
               }
