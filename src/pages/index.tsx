@@ -91,9 +91,9 @@ export default function Home() {
             </IconButton>
             <Popover trigger="hover">
               <PopoverTrigger>
-                <Button leftIcon={<InfoOutlineIcon/>} variant='outline'
-                        colorScheme='blue'
-                        fontWeight='semibold'>Legend</Button>
+                <IconButton aria-label="legend-icon-button">
+                  <InfoOutlineIcon />
+                </IconButton>
               </PopoverTrigger>
               <PopoverContent>
                 <PopoverArrow/>
