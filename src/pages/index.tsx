@@ -126,15 +126,15 @@ export default function Home() {
                     <Flex direction="column">
                       {Spots.map(current => {
                         if (current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
-                          if (current.status === 1) statusColor = "teal.500"
-                          else if (current.status === 2) statusColor = "red.500"
-                          else statusColor = "purple.500"
+                          if (current.status === 1) statusColor = "teal"
+                          else if (current.status === 2) statusColor = "red"
+                          else statusColor = "purple"
                           return (
                             <span key={current.id}>
                               <Popover>
                                 <PopoverTrigger>
                                   <Button color="white"
-                                          p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                          p={3} px={5} m={3} bg={statusColor + ".500"} borderRadius="md"
                                           className="tw-uppercase">{current.id}</Button>
                                 </PopoverTrigger>
                                 <PopoverContent w={200}>
@@ -143,7 +143,7 @@ export default function Home() {
                                   <PopoverHeader><span className="tw-uppercase">
                                     {current.id}</span> | Parking slot</PopoverHeader>
                                   <PopoverBody>
-                                    <Text color={statusColor}>
+                                    <Text color={colorMode === 'light' ? statusColor + ".600" : statusColor + ".300"}>
                                       <span className="tw-uppercase">
                                       {current.id}</span> is
                                       {current.status === 1 ? " free." : ""}
@@ -164,15 +164,15 @@ export default function Home() {
                     <Flex direction="column">
                       {Spots.map(current => {
                         if (current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
-                          if (current.status === 1) statusColor = "teal.500"
-                          else if (current.status === 2) statusColor = "red.500"
-                          else statusColor = "purple.500"
+                          if (current.status === 1) statusColor = "teal"
+                          else if (current.status === 2) statusColor = "red"
+                          else statusColor = "purple"
                           return (
                             <span key={current.id}>
                               <Popover>
                                 <PopoverTrigger>
                                   <Button color="white"
-                                          p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                          p={3} px={5} m={3} bg={statusColor + ".500"} borderRadius="md"
                                           className="tw-uppercase">{current.id}</Button>
                                 </PopoverTrigger>
                                 <PopoverContent w={200}>
@@ -181,7 +181,7 @@ export default function Home() {
                                   <PopoverHeader><span className="tw-uppercase">
                                     {current.id}</span> | Parking slot</PopoverHeader>
                                   <PopoverBody>
-                                    <Text color={statusColor}>
+                                    <Text color={colorMode === 'light' ? statusColor + ".600" : statusColor + ".300"}>
                                       <span className="tw-uppercase">
                                       {current.id}</span> is
                                       {current.status === 1 ? " free." : ""}
