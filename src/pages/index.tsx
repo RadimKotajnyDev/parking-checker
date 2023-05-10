@@ -8,9 +8,10 @@ import {
   PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer, Divider
+  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer, Divider, IconButton
 } from "@chakra-ui/react";
-import {InfoOutlineIcon} from "@chakra-ui/icons"
+import {useColorMode} from '@chakra-ui/color-mode'
+import {InfoOutlineIcon, MoonIcon, SunIcon} from "@chakra-ui/icons"
 import {useEffect, useState} from "react";
 import useSWR from "swr";
 
@@ -78,40 +79,46 @@ export default function Home() {
   let Incrementer: number = 0
   let statusColor: string
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
+  const {colorMode, toggleColorMode} = useColorMode()
   return (
     <>
       <Center>
         <Flex flexDirection="column" align="center" justify="center">
           <Text as='h1' fontWeight='thin' fontSize='4xl' mb={2}>Parking checker system</Text>
-          <Popover trigger="hover">
-            <PopoverTrigger>
-              <Button leftIcon={<InfoOutlineIcon/>} variant='outline'
-                      colorScheme='blue'
-                      fontWeight='semibold'>Legend</Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow/>
-              <PopoverCloseButton/>
-              <PopoverHeader>Legend</PopoverHeader>
-              <PopoverBody>
-                <Flex flexDirection="row" my={2}>
-                  <Box p={3} bg="teal.500" borderRadius="md"></Box>&nbsp;<Text>is free</Text>
-                </Flex>
-                <Flex flexDirection="row" my={2}>
-                  <Box p={3} bg="red.500" borderRadius="md"></Box>&nbsp;<Text>is occupied</Text>
-                </Flex>
-                <Flex flexDirection="row" my={2}>
-                  <Box p={3} bg="purple.500" borderRadius="md"></Box>&nbsp;<Text>is unknown</Text>
-                </Flex>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-          <Flex>{spinner ? (<Spinner size="xl" color="teal.500"/>) : (
+          <Flex gap={5}>
+            <IconButton aria-label="Toggle Mode" onClick={toggleColorMode}>
+              {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
+            </IconButton>
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <Button leftIcon={<InfoOutlineIcon/>} variant='outline'
+                        colorScheme='blue'
+                        fontWeight='semibold'>Legend</Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow/>
+                <PopoverCloseButton/>
+                <PopoverHeader>Legend</PopoverHeader>
+                <PopoverBody>
+                  <Flex flexDirection="row" my={2}>
+                    <Box p={3} bg="teal.500" borderRadius="md"></Box>&nbsp;<Text>is free</Text>
+                  </Flex>
+                  <Flex flexDirection="row" my={2}>
+                    <Box p={3} bg="red.500" borderRadius="md"></Box>&nbsp;<Text>is occupied</Text>
+                  </Flex>
+                  <Flex flexDirection="row" my={2}>
+                    <Box p={3} bg="purple.500" borderRadius="md"></Box>&nbsp;<Text>is unknown</Text>
+                  </Flex>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Flex>
+          <Flex>{spinner ? (<Spinner size="xl" mt={10} color="teal.500"/>) : (
             <Flex>
               {
                 sectors.map((sector: number) => {
                   Incrementer += 1
-                  return <Flex bg="blackAlpha.400"
+                  return <Flex bg={colorMode === 'light' ? "blackAlpha.400" : "whiteAlpha.400"}
                                direction="row"
                                key={sector}
                                w="fit" m={5} p={5} borderRadius="md"
@@ -123,12 +130,33 @@ export default function Home() {
                           else if (current.status === 2) statusColor = "red.500"
                           else statusColor = "purple.500"
                           return (
-                            <>
-                              <Box color="white"
-                                   p={3} px={5} m={3} bg={statusColor} borderRadius="md"
-                                   key={current.id} className="tw-uppercase">{current.id}</Box>
-                              <Divider orientation='horizontal' w='100%' h='2px' />
-                            </>)
+                            <span key={current.id}>
+                              <Popover>
+                                <PopoverTrigger>
+                                  <Button color="white"
+                                          p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                          className="tw-uppercase">{current.id}</Button>
+                                </PopoverTrigger>
+                                <PopoverContent w={200}>
+                                  <PopoverArrow/>
+                                  <PopoverCloseButton/>
+                                  <PopoverHeader><span className="tw-uppercase">
+                                    {current.id}</span> | Parking slot</PopoverHeader>
+                                  <PopoverBody>
+                                    <Text color={statusColor}>
+                                      <span className="tw-uppercase">
+                                      {current.id}</span> is
+                                      {current.status === 1 ? " free." : ""}
+                                      {current.status === 2 ? " occupied." : ""}
+                                      {current.status === 3 ?
+                                        <span> unknown. <br/>Please check arduino's sensor.</span> : ""}
+                                    </Text>
+                                  </PopoverBody>
+                                </PopoverContent>
+                              </Popover>
+                              <Divider orientation='horizontal' w='100%' h='2px'/>
+                            </span>
+                          )
                         }
                       })}
                     </Flex>
@@ -140,13 +168,33 @@ export default function Home() {
                           else if (current.status === 2) statusColor = "red.500"
                           else statusColor = "purple.500"
                           return (
-                            <>
-                              <Box color="white"
-                                   p={3} px={5} m={3} bg={statusColor} borderRadius="md"
-                                   key={current.id} className="tw-uppercase">{current.id}</Box>
+                            <span key={current.id}>
+                              <Popover>
+                                <PopoverTrigger>
+                                  <Button color="white"
+                                          p={3} px={5} m={3} bg={statusColor} borderRadius="md"
+                                          className="tw-uppercase">{current.id}</Button>
+                                </PopoverTrigger>
+                                <PopoverContent w={200}>
+                                  <PopoverArrow/>
+                                  <PopoverCloseButton/>
+                                  <PopoverHeader><span className="tw-uppercase">
+                                    {current.id}</span> | Parking slot</PopoverHeader>
+                                  <PopoverBody>
+                                    <Text color={statusColor}>
+                                      <span className="tw-uppercase">
+                                      {current.id}</span> is
+                                      {current.status === 1 ? " free." : ""}
+                                      {current.status === 2 ? " occupied." : ""}
+                                      {current.status === 3 ?
+                                        <span> unknown. <br/>Please check arduino's sensor.</span> : ""}
+                                    </Text>
+                                  </PopoverBody>
+                                </PopoverContent>
+                              </Popover>
                               <Divider orientation='horizontal' w='100%' h='2px'/>
-
-                            </>)
+                            </span>
+                          )
                         }
                       })}
                     </Flex>
