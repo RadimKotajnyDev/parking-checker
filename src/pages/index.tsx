@@ -10,6 +10,7 @@ import {
   PopoverCloseButton,
   PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer, Divider
 } from "@chakra-ui/react";
+import {InfoOutlineIcon} from "@chakra-ui/icons"
 import {useEffect, useState} from "react";
 import useSWR from "swr";
 
@@ -81,10 +82,12 @@ export default function Home() {
     <>
       <Center>
         <Flex flexDirection="column" align="center" justify="center">
-          <Text as="h1" fontWeight='semibold' fontSize='4xl' mb={2}>Parking checker system</Text>
+          <Text as='h1' fontWeight='thin' fontSize='4xl' mb={2}>Parking checker system</Text>
           <Popover trigger="hover">
             <PopoverTrigger>
-              <Button>Legend</Button>
+              <Button leftIcon={<InfoOutlineIcon/>} variant='outline'
+                      colorScheme='blue'
+                      fontWeight='semibold'>Legend</Button>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow/>

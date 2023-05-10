@@ -1,10 +1,10 @@
 import { extendTheme } from "@chakra-ui/react"
-import "@fontsource/open-sans";
+import "@fontsource/montserrat"
 
 const Theme = extendTheme({
   fonts: {
-    Heading: `"Open Sans", sans-serif`,
-    body: `"Open Sans", sans-serif`,
+    //Heading: `"Montserrat", sans-serif;`,
+    body: `"Montserrat", sans-serif;`,
   },
 })
 
