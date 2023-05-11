@@ -1,15 +1,21 @@
 import {
-  Center, Flex, Grid, GridItem, Heading, Spinner,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  IconButton,
   Popover,
-  PopoverTrigger,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer
+  PopoverTrigger,
+  Spinner,
+  Text
 } from "@chakra-ui/react";
+import {useColorMode} from '@chakra-ui/color-mode'
+import {InfoOutlineIcon, MoonIcon, SunIcon} from "@chakra-ui/icons"
 import {useEffect, useState} from "react";
 import useSWR from "swr";
 
@@ -18,8 +24,8 @@ interface Spot {
   status: number;
 }
 
-const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L",
-  "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+  "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -75,16 +81,22 @@ export default function Home() {
     }
   }, [data, error])
   let Incrementer: number = 0
-  let color: string
+  let statusColor: string
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
+  const {colorMode, toggleColorMode} = useColorMode()
   return (
-    <>
-      <Center>
-        <Flex flexDirection="column" align="center" justify="center">
-          <Heading mb={2}>Parking checker system</Heading>
-          <Popover>
+    <Box h="100%">
+      <Flex flexDirection="column" align="center" h="fit-content" mb={2}>
+        <Text as='h1' fontWeight='thin' fontSize='4xl' mb={2} align="center">Parking checker system</Text>
+        <Flex gap={5}>
+          <IconButton aria-label="Toggle Mode" onClick={toggleColorMode}>
+            {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
+          </IconButton>
+          <Popover trigger="hover">
             <PopoverTrigger>
-              <Button>Legend</Button>
+              <IconButton aria-label="legend-icon-button">
+                <InfoOutlineIcon/>
+              </IconButton>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow/>
@@ -103,46 +115,100 @@ export default function Home() {
               </PopoverBody>
             </PopoverContent>
           </Popover>
-          <Flex>{spinner ? (<Spinner size="xl" color="teal.500"/>) : (
-            <Flex>
-              {
-                sectors.map((sector: number) => {
-                  Incrementer += 1
-                  return <Flex bg="blackAlpha.500"
-                               direction="row"
-                               key={sector}
-                               w="fit" m={5} p={5} borderRadius="md"
-                  >
-                    <Flex direction="column">
-                      {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
-                          if (current.status === 1) color = "teal.500"
-                          else if (current.status === 2) color = "red.500"
-                          else color = "purple.500"
-                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
-                                      key={current.id} className="uppercase">{current.id}</Box>
-                        }
-                      })}
-                    </Flex>
-                    <Flex direction="column">
-                      {Spots.map(current => {
-                        if(current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
-                          if (current.status === 1) color = "teal.500"
-                          else if (current.status === 2) color = "red.500"
-                          else color = "purple.500"
-                          return <Box p={3} px={5} m={3} bg={color} borderRadius="md"
-                                      key={current.id} className="uppercase">{current.id}</Box>
-                        }
-                      })}
-                    </Flex>
-                  </Flex>
-                })
-              }
-            </Flex>
-          )}
-          </Flex>
         </Flex>
-      </Center>
-    </>
+        <Flex>{spinner ? (<Spinner size="xl" mt={100} color="teal.500"/>) : (
+          <Flex h="100%" w="fit-content" wrap="wrap" justify="center">
+            {
+              sectors.map((sector: number) => {
+                Incrementer += 1
+                return <Flex bg={colorMode === 'light' ? "blackAlpha.400" : "whiteAlpha.400"}
+                             direction="row"
+                             key={sector}
+                             w="fit-content" m={5} p={5} borderRadius="md"
+                >
+                  <Flex direction="column">
+                    {Spots.map(current => {
+                      if (current.id[0] == alphabet[sector + Incrementer - 1].toLowerCase()) {
+                        if (current.status === 1) statusColor = "teal"
+                        else if (current.status === 2) statusColor = "red"
+                        else statusColor = "purple"
+                        return (
+                          <span key={current.id}>
+                              <Popover>
+                                <PopoverTrigger>
+                                  <Button color="white"
+                                          p={3} px={5} m={3} bg={statusColor + ".500"} borderRadius="md"
+                                          className="tw-uppercase">{current.id}</Button>
+                                </PopoverTrigger>
+                                <PopoverContent w={200}>
+                                  <PopoverArrow/>
+                                  <PopoverCloseButton/>
+                                  <PopoverHeader><span className="tw-uppercase">
+                                    {current.id}</span> | Parking slot</PopoverHeader>
+                                  <PopoverBody>
+                                    <Text color={colorMode === 'light' ? statusColor + ".600" : statusColor + ".300"}>
+                                      <span className="tw-uppercase">
+                                      {current.id}</span> is
+                                      {current.status === 1 ? " free." : ""}
+                                      {current.status === 2 ? " occupied." : ""}
+                                      {current.status === 3 ?
+                                        <span> unknown. <br/>Please check arduino's sensor.</span> : ""}
+                                    </Text>
+                                  </PopoverBody>
+                                </PopoverContent>
+                              </Popover>
+                              <Divider orientation='horizontal' w='100%' h='2px'/>
+                            </span>
+                        )
+                      }
+                    })}
+                  </Flex>
+                  <Divider orientation='vertical'/>
+                  <Flex direction="column">
+                    {Spots.map(current => {
+                      if (current.id[0] == alphabet[sector + Incrementer].toLowerCase()) {
+                        if (current.status === 1) statusColor = "teal"
+                        else if (current.status === 2) statusColor = "red"
+                        else statusColor = "purple"
+                        return (
+                          <span key={current.id}>
+                              <Popover>
+                                <PopoverTrigger>
+                                  <Button color="white"
+                                          p={3} px={5} m={3} bg={statusColor + ".500"} borderRadius="md"
+                                          className="tw-uppercase">{current.id}</Button>
+                                </PopoverTrigger>
+                                <PopoverContent w={200}>
+                                  <PopoverArrow/>
+                                  <PopoverCloseButton/>
+                                  <PopoverHeader><span className="tw-uppercase">
+                                    {current.id}</span> | Parking slot</PopoverHeader>
+                                  <PopoverBody>
+                                    <Text color={colorMode === 'light' ? statusColor + ".600" : statusColor + ".300"}>
+                                      <span className="tw-uppercase">
+                                      {current.id}</span> is
+                                      {current.status === 1 ? " free." : ""}
+                                      {current.status === 2 ? " occupied." : ""}
+                                      {current.status === 3 ?
+                                        <span> unknown. <br/>Please check arduino's sensor.</span> : ""}
+                                    </Text>
+                                  </PopoverBody>
+                                </PopoverContent>
+                              </Popover>
+                              <Divider orientation='horizontal' w='100%' h='2px'/>
+                            </span>
+                        )
+                      }
+                    })}
+                  </Flex>
+                </Flex>
+              })
+            }
+          </Flex>
+        )}
+        </Flex>
+        <Text fontSize="xs" mt={10} fontWeight="100">Made by Radim Kotajny & Filip Valentiny | &copy; {new Date().getFullYear()}</Text>
+      </Flex>
+    </Box>
   )
 }

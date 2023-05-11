@@ -1,10 +1,26 @@
-import { extendTheme } from "@chakra-ui/react"
-import "@fontsource/open-sans";
+import { extendTheme, type ThemeConfig } from "@chakra-ui/react"
+import "@fontsource/montserrat"
+import { mode } from '@chakra-ui/theme-tools'
+import type { StyleFunctionProps } from '@chakra-ui/styled-system'
 
-const Theme = extendTheme({
+const config: ThemeConfig = {
+  initialColorMode: "dark",
+  useSystemColorMode: true
+};
+
+
+const Theme = extendTheme({config} ,{
   fonts: {
-    Heading: `'Open Sans', sans-serif`,
-    body: `'Open Sans', sans-serif`,
+    //Heading: `"Montserrat", sans-serif;`,
+    body: `"Montserrat", sans-serif;`,
+  },
+  styles: {
+    global: (props: StyleFunctionProps) => ({
+      body: {
+        color: mode('gray.800', 'whiteAlpha.900')(props),
+        bg: mode('white', 'gray.800')(props),
+      },
+    }),
   },
 })
 
