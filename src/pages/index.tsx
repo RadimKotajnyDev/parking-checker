@@ -1,14 +1,18 @@
 import {
-  Center, Flex, Grid, GridItem, Heading, Spinner,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  IconButton,
   Popover,
-  PopoverTrigger,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor, Button, UnorderedList, ListItem, Box, Text, Spacer, Divider, IconButton
+  PopoverTrigger,
+  Spinner,
+  Text
 } from "@chakra-ui/react";
 import {useColorMode} from '@chakra-ui/color-mode'
 import {InfoOutlineIcon, MoonIcon, SunIcon} from "@chakra-ui/icons"
@@ -81,9 +85,9 @@ export default function Home() {
   let sectors = [...Array(Math.round(uniqueLetterCount(Spots) / 2)).keys()]
   const {colorMode, toggleColorMode} = useColorMode()
   return (
-    <Box h="100vh">
-      <Flex flexDirection="column" align="center" h="100vh">
-        <Text as='h1' fontWeight='thin' fontSize='4xl' mb={2}>Parking checker system</Text>
+    <Box h="100%">
+      <Flex flexDirection="column" align="center" h="fit-content" mb={2}>
+        <Text as='h1' fontWeight='thin' fontSize='4xl' mb={2} align="center">Parking checker system</Text>
         <Flex gap={5}>
           <IconButton aria-label="Toggle Mode" onClick={toggleColorMode}>
             {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
@@ -203,6 +207,7 @@ export default function Home() {
           </Flex>
         )}
         </Flex>
+        <Text fontSize="xs" fontWeight="100">Made by Radim Kotajny & Filip Valentiny | &copy; {new Date().getFullYear()}</Text>
       </Flex>
     </Box>
   )

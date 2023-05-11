@@ -4,9 +4,9 @@
 
 @layer base {
     html {
-        height: 100vh
+        height: 100%
     }
     #__next {
-        height: 100vh;
+        height: 100%;
     }
 }
