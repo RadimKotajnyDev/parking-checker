@@ -116,7 +116,7 @@ export default function Home() {
             </PopoverContent>
           </Popover>
         </Flex>
-        <Flex>{spinner ? (<Spinner size="xl" mt={10} color="teal.500"/>) : (
+        <Flex>{spinner ? (<Spinner size="xl" mt={100} color="teal.500"/>) : (
           <Flex h="100%" w="fit-content" wrap="wrap" justify="center">
             {
               sectors.map((sector: number) => {
@@ -207,7 +207,7 @@ export default function Home() {
           </Flex>
         )}
         </Flex>
-        <Text fontSize="xs" fontWeight="100">Made by Radim Kotajny & Filip Valentiny | &copy; {new Date().getFullYear()}</Text>
+        <Text fontSize="xs" mt={10} fontWeight="100">Made by Radim Kotajny & Filip Valentiny | &copy; {new Date().getFullYear()}</Text>
       </Flex>
     </Box>
   )
