@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Spot {
-    id  String @id @unique
+    id  String @unique
     status  Int
     EUI String @unique
 }

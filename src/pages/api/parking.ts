@@ -10,6 +10,8 @@ export default async function handler(
   res: NextApiResponse<Spot[]>
 ) {
   const { query, method } = req
+  const status = parseInt(query.data as string, 10)
+  const EUI = query.EUI as string
   switch (method) {
     case "GET":
       // @ts-ignore
@@ -22,15 +24,16 @@ export default async function handler(
       res.status(200).json(allSpots)
       break
     case "POST":
-      const spot: Spot = await prisma.spot.update({
-        where: {
-          EUI: <string>query.EUI,
-        },
-        data: {
-          status: parseInt(<string>query.data),
-        }
-      })
-      res.status(200)
+      console.log(query, status, EUI)
+      // const spot: Spot = await prisma.spot.update({
+      //   where: {
+      //     EUI: EUI,
+      //   },
+      //   data: {
+      //     status: status,
+      //   },
+      // })
+      res.status(200).json(testJson)
       break
   }
 }
