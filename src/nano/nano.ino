@@ -1,6 +1,6 @@
 #include<NewPing.h>
 //#include<SoftwareSerial.h>
-
+// PMAK-645ce1fb19fbdb3df9c83464-3aaca879430a5cb803e3b9738c795e9105
 #define BAUD 9600
 #define TRIGGER_PIN_US 6
 #define ECHO_PIN_US 2
@@ -30,7 +30,6 @@ D2 - TX
 #include <SPI.h>
 #include "secret.h"
 
-
 #ifdef COMPILE_REGRESSION_TEST
 # define FILLMEIN 0
 #else
@@ -42,9 +41,11 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t payload;
+static uint8_t payload[2];
 static osjob_t sendjob;
 const unsigned TX_INTERVAL = 10;
+static uint8_t status = 1;
+static uint8_t lastStatus = 3;
 const lmic_pinmap lmic_pins = {
     .nss = 10,
     .rxtx = LMIC_UNUSED_PIN,
@@ -55,8 +56,6 @@ NewPing sonar(TRIGGER_PIN_US, ECHO_PIN_US, maxVzdalenost);
 //SoftwareSerial softSerial(RX_WIFI, TX_WIFI);
 
 void onEvent (ev_t ev) {
-    Serial.print(os_getTime());
-    Serial.print(": ");
     switch(ev) {
         case EV_SCAN_TIMEOUT:
             Serial.println(F("EV_SCAN_TIMEOUT"));
@@ -132,24 +131,14 @@ void onEvent (ev_t ev) {
 void do_send(osjob_t* j) {
   if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
-    } else {
-      uint8_t status = 1;
-      uint8_t lastStatus = 3;
-      do {
-        status = getStatus();
-        Serial.print("Current status "); Serial.println(status);
-        if (lastStatus != status) {
-          payload = status;
-          lastStatus = status;
-          LMIC_setTxData2(1, payload, sizeof(payload)-1, 0);
-          Serial.println("Packet queued");
-        } else {
-          lastStatus = status;
-          Serial.println("Packet is same");
-        }
-        delay(5000);
-      } while(status == lastStatus);
-    }
+  } else {
+    uint8_t statusT = getStatus();
+    byte lowStatus = lowByte(statusT);
+    //byte highStatus = highByte(statusT);
+    payload[0] = lowStatus;
+    //payload[1] = highStatus;
+    LMIC_setTxData2(1, payload, sizeof(payload)-1, 0);
+  }
 }
 
 void setup() {
@@ -253,6 +242,14 @@ void setup() {
 }
 
 void loop() {
+    unsigned long now;
+    now = millis();
+    if ((now & 512) != 0) {
+      digitalWrite(13, HIGH);
+    }
+    else {
+      digitalWrite(13, LOW);
+    }
   os_runloop_once();
   //commands();
   /*
@@ -317,19 +314,31 @@ void do_send(osjob_t* j) {
 */
 
 uint8_t getStatus() {
-  float range = 0;
+  do {
+    float range = 0;
 
-  delay(1000);
-  for (int i = 0; i < 10; i++) {
-    range += sonar.ping_cm();
-    delay(400);
-  }
-  range = range / 10;
-  if ((range > 5.0) && (range < 120.0)) {
-    return 2;
-  } else if ((range > 120.0) || (range == 0.0)) {
-    return 1;
-  } else {
-    return 3;
-  }
+    delay(1000);
+    for (int i = 0; i < 10; i++) {
+      range += sonar.ping_cm();
+      delay(400);
+    }
+    range = range / 10;
+    if ((range > 5.0) && (range < 120.0)) {
+      status =  2;
+    } else if ((range > 120.0) || (range == 0.0)) {
+      status = 1;
+    } else {
+      status = 3;
+    }
+    Serial.print("Current status "); Serial.println(status);
+    if (lastStatus != status) {
+      lastStatus = status;
+      Serial.println(F("Packet queued"));
+      return status;
+    } else {
+      lastStatus = status;
+      Serial.println(F("Packet is same"));
+    }
+    delay(5000);
+  } while(status == lastStatus);
 }

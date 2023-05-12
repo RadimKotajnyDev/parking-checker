@@ -18,11 +18,7 @@ import {useColorMode} from '@chakra-ui/color-mode'
 import {InfoOutlineIcon, MoonIcon, SunIcon} from "@chakra-ui/icons"
 import {useEffect, useState} from "react";
 import useSWR from "swr";
-
-interface Spot {
-  id: string;
-  status: number;
-}
+import {Spot} from "@/pages/spot";
 
 const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
   "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -58,7 +54,7 @@ export default function Home() {
     id: "",
     status: 0
   }
-  const url = "/test.json"
+  const url = "/api/parking"
 
   const [Spots, setSpots] = useState([initialSpot]);
   const {data, error} = useSWR(url, fetcher, {refreshInterval: 5000})
