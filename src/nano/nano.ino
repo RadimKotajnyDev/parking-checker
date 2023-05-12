@@ -1,6 +1,6 @@
 #include<NewPing.h>
 //#include<SoftwareSerial.h>
-// PMAK-645ce1fb19fbdb3df9c83464-3aaca879430a5cb803e3b9738c795e9105
+// 
 #define BAUD 9600
 #define TRIGGER_PIN_US 6
 #define ECHO_PIN_US 2
