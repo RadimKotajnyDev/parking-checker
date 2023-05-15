@@ -3,6 +3,14 @@
 ### Technologies used:
 - NextJS framework for frontend
 - arduino
+## Setup
+- Firstly, write environment variables to `.env` config file.
+- Secondly, insert these commands to console to set up this project on your local machine:
+  - `npm install`
+  - `npx prisma migrate dev --name <something>`
+  - `npm run dev`
+
+
 ### Description
 - This project will simply check a parking spot if it's:
     - Free (Green) - corresponding to value 1
