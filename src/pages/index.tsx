@@ -57,7 +57,7 @@ export default function Home() {
   const url = "/api/parking"
 
   const [Spots, setSpots] = useState([initialSpot]);
-  const {data, error} = useSWR(url, fetcher, {refreshInterval: 5000})
+  const {data, error} = useSWR(url, fetcher, {refreshInterval: 15000})
   // remove initial state collision
   useEffect(() => {
     setSpots([])
