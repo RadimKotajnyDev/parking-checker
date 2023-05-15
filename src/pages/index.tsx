@@ -35,17 +35,6 @@ function uniqueLetterCount(Spots: Spot[]): number {
   return uniqueChars.length
 }
 
-function maxLetterCount(Spots: Spot[], letter: string): number {
-  let count = 0
-
-  for (let i = 0; i < Spots.length; i++) {
-    if (Spots[i].id[0] === letter) {
-      count += 1;
-    }
-  }
-  return count
-}
-
 export default function Home() {
 
   const [spinner, setSpinner] = useState(false);
@@ -57,7 +46,7 @@ export default function Home() {
   const url = "/api/parking"
 
   const [Spots, setSpots] = useState([initialSpot]);
-  const {data, error} = useSWR(url, fetcher, {refreshInterval: 5000})
+  const {data, error} = useSWR(url, fetcher, {refreshInterval: 15000})
   // remove initial state collision
   useEffect(() => {
     setSpots([])
