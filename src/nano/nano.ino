@@ -27,13 +27,6 @@ D2 - TX
 #include <SPI.h>
 #include "secret.h"
 
-#ifdef COMPILE_REGRESSION_TEST
-# define FILLMEIN 0
-#else
-# warning "You must replace the values marked FILLMEIN with real values from the TTN control panel!"
-# define FILLMEIN (#dont edit this, edit the lines that use FILLMEIN)
-#endif
-
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
